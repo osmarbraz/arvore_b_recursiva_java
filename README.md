@@ -2,8 +2,8 @@
 Operações implementadas recursivamente com árvore b encadeadas:<br>
 - Inserir<br>
 - Excluir<br>
-- Caminhar Pré (<br>
-- Caminhar Central(In) <br>
+- Caminhar Pré<br>
+- Caminhar Central(In)<br>
 - Caminhar Pós <br>
 - Caminhar Em nível<br>
 - Contar nós da árvore<br>
