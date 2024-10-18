@@ -24,9 +24,11 @@ public class Principal {
         arvore.inserir(arvore.getRaiz(), 10);
         arvore.inserir(arvore.getRaiz(), 20);
         arvore.inserir(arvore.getRaiz(), 30);
+        
         arvore.inserir(arvore.getRaiz(), 40);
         arvore.inserir(arvore.getRaiz(), 15);
         arvore.inserir(arvore.getRaiz(), 25);
+        
         arvore.inserir(arvore.getRaiz(), 35);
         arvore.inserir(arvore.getRaiz(), 45);
         arvore.inserir(arvore.getRaiz(), 50);
@@ -60,13 +62,14 @@ public class Principal {
                     + " 4- Caminhar Central(In) Ordem\n"
                     + " 5- Caminhar Pós Ordem\n"
                     + " 6- Caminhar Em Nível\n"
-                    + " 7- Contar nós \n"
-                    + " 8- Localizar nó \n"
-                    + " 9- Mostrar folhas \n"
-                    + "10- Altura da árvore\n"
-                    + "11- Valor mínimo da árvore\n"
-                    + "12- Valor máximo da árvore\n"
-                    + "13- Apagar árvore\n"
+                    + " 7- Caminhar Em Nível Detalhado\n"
+                    + " 8- Contar nós \n"
+                    + " 9- Localizar nó \n"
+                    + "10- Mostrar folhas \n"
+                    + "11- Altura da árvore\n"
+                    + "12- Valor mínimo da árvore\n"
+                    + "13- Valor máximo da árvore\n"
+                    + "14- Apagar árvore\n"
                     + "99- Sair\n"));
 
             switch (opcao) {
@@ -83,9 +86,9 @@ public class Principal {
                     int dado = Integer.parseInt(JOptionPane.showInputDialog("Digite o valor a ser removido"));
                     //Remove o valor da árvore
                     if (ipe.remover(dado) == true) {
-                        System.out.println("Valor removido da árvore.");
+                        System.out.println("Valor " + dado + " removido da árvore.");
                     } else {
-                        System.out.println("Valor não removido da árvore.");
+                        System.out.println("Valor " + dado + " não removido da árvore.");
                     }
                     break;
                 }
@@ -114,12 +117,18 @@ public class Principal {
                     break;
                 }
                 case 7: {
+                    System.out.println(">> Caminhamento Em Nível Detalhado");
+                    ipe.listarEmNilvelDetalhes();
+                    System.out.println();
+                    break;
+                }
+                case 8: {
                     //Retorna a quantidade de nós
                     int qtde = ipe.contarNo();
                     System.out.println("Nós encontrados: " + qtde);
                     break;
                 }
-                case 8: {
+                case 9: {
                     //Preenche o valor do dado
                     int dado = Integer.parseInt(JOptionPane.showInputDialog("Digite o valor a ser procurado:"));
                     No encontrou = ipe.procurar(dado);
@@ -130,23 +139,23 @@ public class Principal {
                     }
                     break;
                 }
-                case 9: {
+                case 10: {
                     System.out.println("Mostrar Folhas\n" + ipe.encontrarFolhas());
                     break;
                 }
-                case 10: {
+                case 11: {
                     System.out.println("Altura árvore: " + ipe.getAltura());
                     break;
                 }
-                case 11: {
+                case 12: {
                     System.out.println("Valor mínimo da árvore: " + ipe.getValorMinimo());
                     break;
                 }
-                case 12: {
+                case 13: {
                     System.out.println("Valor máximo da árvore: " + ipe.getValorMaximo());
                     break;
                 }
-                case 13: {
+                case 14: {
                     ipe.apagar();
                     System.out.println("Árvore apagada");
                     break;
