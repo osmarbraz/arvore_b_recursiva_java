@@ -24,17 +24,31 @@ public class Principal {
         arvore.inserir(arvore.getRaiz(), 10);
         arvore.inserir(arvore.getRaiz(), 20);
         arvore.inserir(arvore.getRaiz(), 30);
-        
         arvore.inserir(arvore.getRaiz(), 40);
-        arvore.inserir(arvore.getRaiz(), 15);
-        arvore.inserir(arvore.getRaiz(), 25);
-        
-        arvore.inserir(arvore.getRaiz(), 35);
-        arvore.inserir(arvore.getRaiz(), 45);
         arvore.inserir(arvore.getRaiz(), 50);
+        arvore.inserir(arvore.getRaiz(), 60);        
+        arvore.inserir(arvore.getRaiz(), 70);
+        arvore.inserir(arvore.getRaiz(), 80);
+        arvore.inserir(arvore.getRaiz(), 90);
         System.out.println("Caminho Centro:");
         arvore.listarCentralOrdem();
         System.out.println();
+        
+        //Grau t = 3
+        //Nós: 10 20 30 40 50 60 
+        //Árvore:
+        //      30
+        //10 10    40 50 60
+        //
+        //Nós:10 20 30 40 50 60 70 80 
+        //Árvore:
+        //      30
+        //10 10    40 50 60 70 80
+        //
+        //Nós: 10 20 30 40 50 60 70 80 90
+        //Árvore:
+        //       30      60
+        //10 10    40 50   70 80 90
     }
 
     /**
@@ -46,7 +60,7 @@ public class Principal {
         /**
          * Declara e instância da árvore.
          */
-        ArvoreB ipe = new ArvoreB();
+        ArvoreB ipe = new ArvoreB(3);
 
         // Controla o menu da lista
         int opcao = -1;
@@ -77,8 +91,8 @@ public class Principal {
                     //Preenche o valor do dado
                     int dado = leitura();
                     //Insere o valor na árvore
-                    //ipe.inserir(dado, 0);
-                    ipe.inserir(ipe.getRaiz(), dado);
+                    ipe.inserir(dado);
+                    System.out.println("Valor " + dado + " inserido  da árvore.");
                     break;
                 }
                 case 2: {

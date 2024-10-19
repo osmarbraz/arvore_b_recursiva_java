@@ -3,7 +3,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Árvore B
+ * Árvore B.
+ * 
+ * Criada  por Rudolf Bayer e Edward Meyers McCreight em 1971 enquanto 
+ * trabalhavam no Boeing Scientific Research Labs, a origem do nome (árvore B) 
+ * não foi definida por estes. Especula-se que o B venha da palavra 
+ * balanceamento, do nome de um de seus inventores Bayer ou de Boeing, nome da empresa.
  *
  * Página 505 Thomas H. Cormen 3 ed.
  *
@@ -26,6 +31,8 @@ public class ArvoreB {
      */
     public ArvoreB() {
         this(2);
+        //3 espaços para as chaves
+        //4 espaços para os filhos
     }
 
     /**
@@ -45,9 +52,9 @@ public class ArvoreB {
      */
     public void alocarRaiz() {
         //Instancia o nó raiz da árvore.
-        this.raiz = new No();
+        this.raiz = new No(this.t);
         //Aloca as estruturas auxiliares do nó
-        raiz.alocarNo(this.t);
+        raiz.alocarEstruturaNo();
     }
 
     /**
@@ -173,18 +180,16 @@ public class ArvoreB {
     public void listarEmNilvel(No _raiz) {
         Queue<No> queue = new LinkedList<>();
         queue.add(_raiz);
-
-        while (!queue.isEmpty()) {
+        while (!queue.isEmpty()) {          
             No atual = queue.poll();
             for (int i = 0; i < atual.getN(); i++) {;
                 System.out.print(atual.getChave(i) + " ");
             }
             if (!atual.getFolha()) {
-                for (int i = 0; i < atual.getN(); i++) {
+                for (int i = 0; i < atual.getN()+1; i++) {
                     queue.add(atual.getC(i));
                 }
             }
-
             System.out.println(); // Nova linha para cada nível
         }
     }
@@ -203,36 +208,33 @@ public class ArvoreB {
      * @param _raiz Início da sub-árvore.
      */
     public void listarEmNilvelDetalhes(No _raiz) {
+        //Lista para armanzenar os nós do nível
         Queue<No> queue = new LinkedList<>();
+        //Começa pela raiz
         queue.add(_raiz);
-        
+        System.out.println("OID Raiz:" + this.getRaiz());
         int nivel = 0;
 
         while (!queue.isEmpty()) {
             Queue<No> proximoNivel = new LinkedList<>();
+            
             System.out.println("Nível:" + nivel);
             
             while (!queue.isEmpty()) {
+                //Retira o primeiro nó da fila
                 No atual = queue.poll();
-                            
-                System.out.print("[");
-                for (int i = 0; i < atual.getN(); i++) {;
-                    
-                    System.out.print(atual.getChave(i) + 
-                            ":" + (atual.getFolha()==true?"F":"M") + 
-                            ":" + atual.getN() +
-                            " ");
-                }
-                System.out.println("]");
-                
-                if (!atual.getFolha()) {
-                    for (int i = 0; i < atual.getN(); i++) {
+
+                //Exib os ddos do nó atual                
+                System.out.println("[" + atual.getDadosVetoresStr() + "]");
+                                
+                //Adiciona os filhos do nó atual a lista para exibir o próximo nível                
+                for (int i = 0; i < atual.getN() + 1; i++) {
+                    if (atual.getC(i) != null) {
                         proximoNivel.add(atual.getC(i));
                     }
                 }
             }
             nivel = nivel + 1;
-            //System.out.println(); // Nova linha para cada nível
             queue = proximoNivel;
         }
     }
@@ -244,99 +246,72 @@ public class ArvoreB {
     public void listarEmNilvelDetalhes() {
         this.listarEmNilvelDetalhes(this.getRaiz());
     }
-
+    
     /**
-     * Dividir um nó em 2 filhos.
+     * Dividir(split) um nó em 2 filhos.
      *
      * Função para dividir o filho r deste nó. Observe que r deve estar completo
      * quando esta função for chamada.
      *
      * Baseado no método B-TREE-SPLIT-CHILD(x,i) Thomas H. Cormen Página 494.
      *
-     * @param _raiz Raiz da sub-árvore.
-     * @param idx Indíce da posição a ser dividida.
+     * @param x Raiz da sub-árvore.
+     * @param i Indíce da posição a ser dividida.
      */
-    public void dividirFilho(No _raiz, int idx) {
-
-        //Cria um novo nó que irá armazenar chaves (t-1) de y
-        No z = new No();
-        z.alocarNo(t);
+    public void dividirFilho(No x, int i) {
+        //Cria um novo nó filho que irá armazenar chaves (t-1) de y.
+        //Este novo nó vai ficar a esquerda de y.
+        No z = new No(this.t);
+        z.alocarEstruturaNo();
 
         //Dividir x em duas partes.
-        // y filho da esquerda
-        No y = _raiz.getC(idx);
+        //Recupera o primeiro filho da raiz.
+        //y filho da esquerda da raiz(x)
+        No y = x.getC(i);
 
-        // z filho da direita
+        // z filho da direita da raiz(x)
         z.setFolha(y.getFolha());
         z.setN(t - 1);
 
-        //Copia as últimas chaves (t-1) de y para z  
+        //Copia as últimas chaves (t-1) de y(esquerda) para z(direita)
         for (int j = 0; j < t - 1; j++) {
             z.setChave(j, y.getChave(j + t));
+            //Zera a chave de y pois já foram copiados para z
+            y.setChave(j + t, 0);
         }
         //Se y não for folha
         if (y.getFolha() == false) {
             //Copia os últimos t filhos de y para z
             for (int j = 0; j < t ; j++) {
                 z.setC(j, y.getC(j + t));
+                //Zera os filhos de y pois já foram copiados para z
+                y.setC(j + t, null);
             }
         }
         //Reduz a quantidade de elementos de y
         y.setN(t - 1);
-
+        
         //Como este nó terá um novo filho, cria espaço para o novo filho
-        for (int j = _raiz.getN(); j >= idx + 1; j--) {
-            _raiz.setC(j + 1, _raiz.getC(j));
+        for (int j = x.getN(); j > i ; j--) {
+            x.setC(j + 1, x.getC(j));
         }
         //Conecta o novo filho a este nó
-        _raiz.setC(idx + 1, z);
+        x.setC(i + 1, z);
 
         //Uma chave de y se moverá para este nó. 
         //Encontre a localização da nova chave e mova todas as 
         //chaves maiores um espaço à frente.
         //Empurra as chaves de x para direta para dar lugar a z        
-        for (int j = _raiz.getN() - 1; j >= idx; j--) {
-            _raiz.setChave(j + 1, _raiz.getChave(j));
+        for (int j = x.getN()-1; j >= i; j--) {
+            x.setChave(j + 1, x.getChave(j));
         }
-        //Copie a chave do meio de y para este nó
-        _raiz.setChave(idx, y.getChave(t - 1));
+        //Copie a chave do meio de y para este nó raiz
+        x.setChave(i, y.getChave(t - 1));
+        //Zera a chave de y pois já foi copiado para a raiz
+        y.setChave(t - 1, 0);        
 
-        // Incrementa a contagem de chaves neste nó
-        _raiz.setN(_raiz.getN() + 1);
-    }
-
-    /**
-     * Inserção em árvore B.
-     *
-     * Baseado no método B-TREE-INSERT(T,k) Thomas H. Cormen Página 495 Em
-     * Cormen r = _raiz
-     *
-     * @param _raiz Raiz da sub-árvore.
-     * @param k Chave a ser inserida.
-     */
-    public void inserir(No _raiz, int k) {
-        //Já atingiu a quantidade máxima de valores no Nó.        
-        if (_raiz.getN() == (2 * t - 1)) {
-            //Cria um novo nó
-            No s = new No();
-            s.alocarNo(t);
-
-            //Modifica a raiz com o novo nó criado
-            this.setRaiz(s);
-            s.setFolha(false);
-            s.setN(0);
-            //Tornar a raiz anterior filho da nova raiz
-            s.setC(0, _raiz);
-
-            //Dividir a raiz antiga e mover 1 chave para a nova raiz
-            this.dividirFilho(s, 0);
-
-            //Insere na nova sub-árvore
-            this.inserirNaoCheio(s, k);
-        } else {
-            //Arvore não está cheia
-            this.inserirNaoCheio(_raiz, k);
-        }
+        //Incrementa a contagem de chaves neste nó
+        x.setN(x.getN() + 1);
     }
 
     /**
@@ -374,6 +349,50 @@ public class ArvoreB {
             }
             inserirNaoCheio(_raiz.getC(i), k);
         }
+    }
+    
+    /**
+     * Inserção em sub-árvore B.
+     *
+     * Inserir recursivo em sub-árvore B.
+     * Baseado no método B-TREE-INSERT(T,k) Thomas H. Cormen Página 495 Em
+     * Cormen r = _raiz
+     *
+     * @param _raiz Raiz da sub-árvore.
+     * @param k Chave a ser inserida.
+     */
+    public void inserir(No _raiz, int k) {
+        //Já atingiu a quantidade máxima de valores no Nó.        
+        if (_raiz.getN() == (2 * t - 1)) {
+            //Cria um novo nó
+            No s = new No(this.t);
+            s.alocarEstruturaNo();
+
+            //Modifica a raiz com o novo nó criado
+            this.setRaiz(s);
+            s.setFolha(false);
+            s.setN(0);
+            //Tornar a raiz anterior filho da nova raiz
+            s.setC(0, _raiz);
+
+            //Dividir a raiz atual e mover 1a chave para a nova raiz
+            this.dividirFilho(s, 0);
+
+            //Insere na nova sub-árvore
+            this.inserirNaoCheio(s, k);
+        } else {
+            //Arvore não está cheia
+            this.inserirNaoCheio(_raiz, k);
+        }
+    }
+    
+    /**
+     * Inserção na raiz de árvore B.
+     *
+     * @param k Chave a ser inserida.
+     */
+    public void inserir(int k) {
+        this.inserir(this.getRaiz(), k);
     }
 
     /**
@@ -545,9 +564,9 @@ public class ArvoreB {
     public String encontrarFolhas(No _raiz) {
         String str = "";
         if (_raiz != null) {
-            if (_raiz.getFolha()) {
-                for (int i = 0; i < _raiz.getN(); i++) {
-                    str = str + encontrarFolhas(_raiz.getC(i));
+            for (int i = 0; i < _raiz.getN(); i++) {
+                str = str + encontrarFolhas(_raiz.getC(i));
+                if (_raiz.getFolha()) {
                     str = str + " " + _raiz.getChave(i) + " - ";
                 }
             }
@@ -576,7 +595,6 @@ public class ArvoreB {
             return 0;
         } else {
             int esquerda = 0;
-
             for (int i = 0; i < _raiz.getN(); i++) {
                 esquerda = esquerda + getAltura(_raiz.getC(i));
             }
