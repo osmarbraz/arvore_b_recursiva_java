@@ -1,4 +1,4 @@
-# Implementação de Árvore B Encadeada em Java
+# Implementação recursiva de Árvore B Encadeada em Java
 Operações implementadas recursivamente com árvore b encadeadas:<br>
 - Inserir<br>
 - Excluir<br>
