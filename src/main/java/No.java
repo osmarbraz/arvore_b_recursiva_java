@@ -46,18 +46,12 @@ public class No {
         this.n = 0;       
         this.t = t;
         this.folha = true;
-    }
-
-    /**
-     * Aloca as estruturas do nó da árvore b.
-     */
-    public void alocarEstruturaNo() {
         //Aloca o vetor de chaves
         this.chave = new int[2 * this.t - 1];
         //Aloca o vetor nós filhos
         this.c = new No[2 * this.t];
     }
-
+   
     /**
      * Recuperador da chave.
      *

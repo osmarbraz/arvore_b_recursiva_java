@@ -53,8 +53,6 @@ public class ArvoreB {
     public void alocarRaiz() {
         //Instancia o nó raiz da árvore.
         this.raiz = new No(this.t);
-        //Aloca as estruturas auxiliares do nó
-        raiz.alocarEstruturaNo();
     }
 
     /**
@@ -262,7 +260,6 @@ public class ArvoreB {
         //Cria um novo nó filho que irá armazenar chaves (t-1) de y.
         //Este novo nó vai ficar a esquerda de y.
         No z = new No(this.t);
-        z.alocarEstruturaNo();
 
         //Dividir x em duas partes.
         //Recupera o primeiro filho da raiz.
@@ -366,7 +363,6 @@ public class ArvoreB {
         if (_raiz.getN() == (2 * t - 1)) {
             //Cria um novo nó
             No s = new No(this.t);
-            s.alocarEstruturaNo();
 
             //Modifica a raiz com o novo nó criado
             this.setRaiz(s);
