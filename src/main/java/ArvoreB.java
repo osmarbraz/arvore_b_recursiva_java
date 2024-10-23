@@ -703,7 +703,7 @@ public class ArvoreB {
     }
 
     /**
-     * removerCompleto uma chave de um nó não folha.
+     * remover uma chave de um nó não folha.
      *
      * @param _raiz Raiz da sub-árvore.
      * @param idx Indice do nó na raiz.
@@ -875,7 +875,7 @@ public class ArvoreB {
     }
 
     /**
-     * removerCompleto uma chave da árvore.
+     * Remove uma chave da árvore.
      *
      * @param k Chave a ser removida.
      * @return Verdadeiro ou falso se conseguiu realizar a exclusão.
