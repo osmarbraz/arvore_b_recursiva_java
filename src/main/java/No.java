@@ -171,14 +171,6 @@ public class No {
         }
         return i;
     }
-    
-    public int procurarPosicaoChave1(int k) {
-        int i = 0;
-        while ((i < n) && (k > chave[i])) {
-            i = i + 1;
-        }
-        return i;
-    }
 
     /**
      * Retorna o valor em String do dado.
