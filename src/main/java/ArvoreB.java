@@ -181,7 +181,7 @@ public class ArvoreB {
         queue.add(_raiz);
         while (!queue.isEmpty()) {
             No atual = queue.poll();
-            for (int i = 0; i < atual.getN(); i++) {;
+            for (int i = 0; i < atual.getN(); i++) {
                 System.out.print(atual.getChave(i) + " ");
             }
             if (!atual.getFolha()) {
@@ -321,6 +321,7 @@ public class ArvoreB {
 
         int i = _raiz.getN() - 1;
         if (_raiz.getFolha()) {
+            //Procura a posição i de inserção
             while ((i >= 0) && (k < _raiz.getChave(i))) {
                 _raiz.setChave(i + 1, _raiz.getChave(i));
                 i = i - 1;
@@ -330,13 +331,13 @@ public class ArvoreB {
         } else {
             //Se o nó não é folha
 
-            // Encontra o filho que terá a nova chave
+            //Encontra o filho que terá a nova chave
             while ((i >= 0) && (k < _raiz.getChave(i))) {
                 i = i - 1;
             }
             i = i + 1;
 
-            // Veja se o filho encontrado está cheio
+            //Veja se o filho encontrado está cheio
             if (_raiz.getC(i).getN() == (2 * _raiz.getT() - 1)) {
                 this.dividirFilho(_raiz, i);
                 if (k > _raiz.getChave(i)) {
@@ -856,7 +857,7 @@ public class ArvoreB {
             }
         } else {
             //A _raiz não é folha
-            if (!_raiz.getFolha()) {            
+            if (!_raiz.getFolha()) {
                 boolean flag = (i == _raiz.getN());
 
                 if (_raiz.getC(i).getN() < t) {
@@ -870,7 +871,7 @@ public class ArvoreB {
             } else {
                 //Chegou em folha e não achou
                 System.out.println("A chave " + k + " não está na árvore");
-            } 
+            }
         }
     }
 

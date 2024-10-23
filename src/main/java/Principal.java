@@ -26,14 +26,14 @@ public class Principal {
         arvore.inserir(arvore.getRaiz(), 30);
         arvore.inserir(arvore.getRaiz(), 40);
         arvore.inserir(arvore.getRaiz(), 50);
-        arvore.inserir(arvore.getRaiz(), 60);        
+        arvore.inserir(arvore.getRaiz(), 60);
         arvore.inserir(arvore.getRaiz(), 70);
         arvore.inserir(arvore.getRaiz(), 80);
         arvore.inserir(arvore.getRaiz(), 90);
         System.out.println("Caminho Centro:");
         arvore.listarCentralOrdem();
         System.out.println();
-        
+
         //Grau t = 3
         //Nós: 10 20 30 40 50 60 
         //Árvore:
@@ -173,7 +173,7 @@ public class Principal {
                     ipe.apagar();
                     System.out.println("Árvore apagada");
                     break;
-                }                
+                }
                 //Preenche uma árvore com vários nós
                 case 98: {
                     arvoreExemplo(ipe);
