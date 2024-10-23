@@ -4,11 +4,12 @@ import java.util.Queue;
 
 /**
  * Árvore B.
- * 
- * Criada  por Rudolf Bayer e Edward Meyers McCreight em 1971 enquanto 
- * trabalhavam no Boeing Scientific Research Labs, a origem do nome (árvore B) 
- * não foi definida por estes. Especula-se que o B venha da palavra 
- * balanceamento, do nome de um de seus inventores Bayer ou de Boeing, nome da empresa.
+ *
+ * Criada por Rudolf Bayer e Edward Meyers McCreight em 1971 enquanto
+ * trabalhavam no Boeing Scientific Research Labs, a origem do nome (árvore B)
+ * não foi definida por estes. Especula-se que o B venha da palavra
+ * balanceamento, do nome de um de seus inventores Bayer ou de Boeing, nome da
+ * empresa.
  *
  * Página 505 Thomas H. Cormen 3 ed.
  *
@@ -52,7 +53,7 @@ public class ArvoreB {
      */
     public void alocarRaiz() {
         //Instancia o nó raiz da árvore.
-        this.raiz = new No(this.t);
+        this.raiz = new No(this.t, true);
     }
 
     /**
@@ -178,20 +179,20 @@ public class ArvoreB {
     public void listarEmNilvel(No _raiz) {
         Queue<No> queue = new LinkedList<>();
         queue.add(_raiz);
-        while (!queue.isEmpty()) {          
+        while (!queue.isEmpty()) {
             No atual = queue.poll();
             for (int i = 0; i < atual.getN(); i++) {;
                 System.out.print(atual.getChave(i) + " ");
             }
             if (!atual.getFolha()) {
-                for (int i = 0; i < atual.getN()+1; i++) {
+                for (int i = 0; i < atual.getN() + 1; i++) {
                     queue.add(atual.getC(i));
                 }
             }
             System.out.println(); // Nova linha para cada nível
         }
     }
-    
+
     /**
      * Caminhamento em nível na árvore.
      *
@@ -199,7 +200,7 @@ public class ArvoreB {
     public void listarEmNilvel() {
         this.listarEmNilvel(this.getRaiz());
     }
-    
+
     /**
      * Caminhamento em nível com detalhes na sub-árvore.
      *
@@ -215,16 +216,16 @@ public class ArvoreB {
 
         while (!queue.isEmpty()) {
             Queue<No> proximoNivel = new LinkedList<>();
-            
+
             System.out.println("Nível:" + nivel);
-            
+
             while (!queue.isEmpty()) {
                 //Retira o primeiro nó da fila
                 No atual = queue.poll();
 
                 //Exib os ddos do nó atual                
                 System.out.println("[" + atual.getDadosVetoresStr() + "]");
-                                
+
                 //Adiciona os filhos do nó atual a lista para exibir o próximo nível                
                 for (int i = 0; i < atual.getN() + 1; i++) {
                     if (atual.getC(i) != null) {
@@ -244,7 +245,7 @@ public class ArvoreB {
     public void listarEmNilvelDetalhes() {
         this.listarEmNilvelDetalhes(this.getRaiz());
     }
-    
+
     /**
      * Dividir(split) um nó em 2 filhos.
      *
@@ -257,17 +258,14 @@ public class ArvoreB {
      * @param i Indíce da posição a ser dividida.
      */
     public void dividirFilho(No x, int i) {
-        //Cria um novo nó filho que irá armazenar chaves (t-1) de y.
-        //Este novo nó vai ficar a esquerda de y.
-        No z = new No(this.t);
-
-        //Dividir x em duas partes.
+        //Dividir x em duas partes, y e z.
         //Recupera o primeiro filho da raiz.
         //y filho da esquerda da raiz(x)
         No y = x.getC(i);
 
-        // z filho da direita da raiz(x)
-        z.setFolha(y.getFolha());
+        //Cria um novo nó filho que irá armazenar chaves (t-1) de y.
+        //Este novo nó vai ficar a esquerda de y.
+        No z = new No(this.t, y.getFolha());
         z.setN(t - 1);
 
         //Copia as últimas chaves (t-1) de y(esquerda) para z(direita)
@@ -279,7 +277,7 @@ public class ArvoreB {
         //Se y não for folha
         if (y.getFolha() == false) {
             //Copia os últimos t filhos de y para z
-            for (int j = 0; j < t ; j++) {
+            for (int j = 0; j < t; j++) {
                 z.setC(j, y.getC(j + t));
                 //Zera os filhos de y pois já foram copiados para z
                 y.setC(j + t, null);
@@ -287,9 +285,9 @@ public class ArvoreB {
         }
         //Reduz a quantidade de elementos de y
         y.setN(t - 1);
-        
+
         //Como este nó terá um novo filho, cria espaço para o novo filho
-        for (int j = x.getN(); j > i ; j--) {
+        for (int j = x.getN(); j >= i + 1; j--) {
             x.setC(j + 1, x.getC(j));
         }
         //Conecta o novo filho a este nó
@@ -299,13 +297,13 @@ public class ArvoreB {
         //Encontre a localização da nova chave e mova todas as 
         //chaves maiores um espaço à frente.
         //Empurra as chaves de x para direta para dar lugar a z        
-        for (int j = x.getN()-1; j >= i; j--) {
+        for (int j = x.getN() - 1; j >= i; j--) {
             x.setChave(j + 1, x.getChave(j));
         }
         //Copie a chave do meio de y para este nó raiz
         x.setChave(i, y.getChave(t - 1));
         //Zera a chave de y pois já foi copiado para a raiz
-        y.setChave(t - 1, 0);        
+        y.setChave(t - 1, 0);
 
         //Incrementa a contagem de chaves neste nó
         x.setN(x.getN() + 1);
@@ -320,7 +318,8 @@ public class ArvoreB {
      * @param k Chave a ser inserida.
      */
     public void inserirNaoCheio(No _raiz, int k) {
-        int i = _raiz.getN()-1;
+
+        int i = _raiz.getN() - 1;
         if (_raiz.getFolha()) {
             while ((i >= 0) && (k < _raiz.getChave(i))) {
                 _raiz.setChave(i + 1, _raiz.getChave(i));
@@ -338,7 +337,7 @@ public class ArvoreB {
             i = i + 1;
 
             // Veja se o filho encontrado está cheio
-            if (_raiz.getC(i).getN() == 2 * t - 1) {
+            if (_raiz.getC(i).getN() == (2 * _raiz.getT() - 1)) {
                 this.dividirFilho(_raiz, i);
                 if (k > _raiz.getChave(i)) {
                     i = i + 1;
@@ -347,29 +346,28 @@ public class ArvoreB {
             inserirNaoCheio(_raiz.getC(i), k);
         }
     }
-    
+
     /**
      * Inserção em sub-árvore B.
      *
-     * Inserir recursivo em sub-árvore B.
-     * Baseado no método B-TREE-INSERT(T,k) Thomas H. Cormen Página 495 Em
-     * Cormen r = _raiz
+     * Inserir recursivo em sub-árvore B. Baseado no método B-TREE-INSERT(T,k)
+     * Thomas H. Cormen Página 495 Em Cormen r = _raiz
      *
      * @param _raiz Raiz da sub-árvore.
      * @param k Chave a ser inserida.
      */
     public void inserir(No _raiz, int k) {
-        //Já atingiu a quantidade máxima de valores no Nó.        
-        if (_raiz.getN() == (2 * t - 1)) {
+        //Já atingiu a quantidade máxima de chaves no Nó.
+        if (_raiz.getN() == (2 * this.t - 1)) {
             //Cria um novo nó
-            No s = new No(this.t);
+            No s = new No(this.t, false);
 
-            //Modifica a raiz com o novo nó criado
-            this.setRaiz(s);
-            s.setFolha(false);
+            //Quantidade de chaves no novo no
             s.setN(0);
             //Tornar a raiz anterior filho da nova raiz
             s.setC(0, _raiz);
+            //Modifica a raiz com o novo nó criado
+            this.setRaiz(s);
 
             //Dividir a raiz atual e mover 1a chave para a nova raiz
             this.dividirFilho(s, 0);
@@ -381,7 +379,7 @@ public class ArvoreB {
             this.inserirNaoCheio(_raiz, k);
         }
     }
-    
+
     /**
      * Inserção na raiz de árvore B.
      *
@@ -392,14 +390,13 @@ public class ArvoreB {
     }
 
     /**
-     * Procura nó na árvore.
-     *
-     * Procura uma chave k na sub-arvore do nó atual.
+     * Procura nó na árvore.Procura uma chave k na sub-arvore do nó atual.
      *
      * Baseado no métodoB-TREE-SEARCH(x,k) Thomas H. Cormen Página 492
      *
      * @param _raiz Raiz da sub-ãrvore.
      * @param k Chave a ser procurada.
+     * @return Retorna o nó que possui o valor k.
      */
     public No procurar(No _raiz, int k) {
 
@@ -442,12 +439,13 @@ public class ArvoreB {
      * Excluir árvore recursivamente apartir de _raiz.
      *
      * @param _raiz Início da árvore a ser excluida.
+     * @return Retorna nul para o nó apgado.
      */
     public No apagar(No _raiz) {
         if (_raiz != null) {
             if (!_raiz.getFolha()) {
                 for (int i = 0; i <= _raiz.getN(); ++i) {
-                    apagar(_raiz.getC(i));
+                    return apagar(_raiz.getC(i));
                 }
                 return null;
             }
@@ -472,7 +470,6 @@ public class ArvoreB {
      */
     public int getValorMinimo(No _raiz) {
         if (_raiz == null) {
-            System.out.println("A árvore está vazia.");
             return -1;
         } else {
             if (_raiz.getFolha()) {
@@ -502,7 +499,6 @@ public class ArvoreB {
      */
     public int getValorMaximo(No _raiz) {
         if (_raiz == null) {
-            System.out.println("A árvore está vazia.");
             return -1;
         } else {
             if (_raiz.getFolha()) {
@@ -620,9 +616,9 @@ public class ArvoreB {
      */
     public int getChaveAntecessor(No _raiz) {
         while (!_raiz.getFolha()) {
-            _raiz = _raiz.getC(_raiz.getN() + 1);
+            _raiz = _raiz.getC(_raiz.getN());
         }
-        return _raiz.getChave(_raiz.getN());
+        return _raiz.getChave(_raiz.getN() - 1);
     }
 
     /**
@@ -641,58 +637,64 @@ public class ArvoreB {
     /**
      * Merge de dois nós.
      *
-     * @param _raiz Início da árvore. 
+     * @param _raiz Início da árvore.
      * @param idx Indice do nó na raiz.
      */
     public void mergeFilhos(No _raiz, int idx) {
         //Recupera o nó do filho
         No filho = _raiz.getC(idx);
-        //Recupera o nó do irmão;
+        //Recupera o nó do irmão do filho;
         No irmao = _raiz.getC(idx + 1);
-        
-        System.out.println("Realiza merge de filho: " + filho.getChave(idx));
-        System.out.println("Realiza merge de irmao:" + irmao.getChave(idx));
-        
-        filho.setChave(t / 2 - 1, _raiz.getChave(idx));
-
-        for (int i = 0; i < irmao.getN(); i++) {            
-            filho.setChave(i + t / 2, irmao.getChave(i));
+        //Move a chave para o filho
+        filho.setChave(t - 1, _raiz.getChave(idx));
+        //Desloca as chaves do irmão para o filho
+        for (int i = 0; i < irmao.getN(); i++) {
+            filho.setChave(i + t, irmao.getChave(i));
         }
-
+        //Se tem filhos
         if (!filho.getFolha()) {
+            //Desloca os filhos do irmão para o filho
             for (int i = 0; i <= irmao.getN(); i++) {
-                filho.setC(i + t / 2, irmao.getC(i));
+                filho.setC(i + t, irmao.getC(i));
             }
         }
-
+        //Desloca as chaves uma posição para esquerda
         for (int i = idx + 1; i < _raiz.getN(); i++) {
             _raiz.setChave(i - 1, _raiz.getChave(i));
         }
-
+        //Desloca os filhos uma posição para esquerda
         for (int i = idx + 2; i <= _raiz.getN(); i++) {
             _raiz.setC(i - 1, _raiz.getC(i));
         }
 
         //Incrementa o nó filho
-        filho.setN(filho.getN() + 1);
+        filho.setN(filho.getN() + irmao.getN() + 1);
+
+        //Zera a posição da chave copiada
+        _raiz.setChave(_raiz.getN() - 1, 0);
+
         //Decrementa o nó irmao
         _raiz.setN(_raiz.getN() - 1);
-        
-        irmao = null;        
+
+        //Apaga o irmão
+        irmao = null;
     }
-    
+
     /**
-     * Remove uma chave de um nó folha.
+     * removerCompleto uma chave de um nó folha.
      *
      * @param _raiz Raiz da sub-árvore.
      * @param idx Indice do nó na raiz.
      * @return Verdadeiro ou falso se conseguiu realizar a exclusão.
      */
     public boolean removerFolha(No _raiz, int idx) {
-        
+
         for (int i = idx + 1; i < _raiz.getN(); i++) {
             _raiz.setChave(i - 1, _raiz.getChave(i));
         }
+
+        //Zera a folha apagada
+        _raiz.setChave(_raiz.getN() - 1, 0);
 
         //Remove k do _raiz
         _raiz.setN(_raiz.getN() - 1);
@@ -701,7 +703,7 @@ public class ArvoreB {
     }
 
     /**
-     * Remove uma chave de um nó não folha.
+     * removerCompleto uma chave de um nó não folha.
      *
      * @param _raiz Raiz da sub-árvore.
      * @param idx Indice do nó na raiz.
@@ -709,21 +711,19 @@ public class ArvoreB {
     public void removerNaoFolha(No _raiz, int idx) {
         // Recupera a chave da _raiz
         int k = _raiz.getChave(idx);
-        
-        System.out.println("Removendo não folha com valor " + k);
 
         //O nó antecessor contém chaves igual a t
-        if (_raiz.getC(idx).getN() >= t / 2) {
-            //Obtem a chave do antecessor
-            int kpred = this.getChaveAntecessor(_raiz);
+        if (_raiz.getC(idx).getN() >= t) {
+            //Obtem a chave do antecessor            
+            int kpred = this.getChaveAntecessor(_raiz.getC(idx));
             //Substitui a chave na raiz
             _raiz.setChave(idx, kpred);
             this.remover(_raiz.getC(idx), kpred);
         } else {
             // O nó sucessor contém chaves igual a t
-            if (_raiz.getC(idx + 1).getN() >= t / 2) {
+            if (_raiz.getC(idx + 1).getN() >= t) {
                 //Obtem a chave do sucessor
-                int ksuc = this.getChaveSucessor(_raiz);
+                int ksuc = this.getChaveSucessor(_raiz.getC(idx + 1));
                 //Substitui a chave na raiz
                 _raiz.setChave(idx, ksuc);
                 this.remover(_raiz.getC(idx + 1), ksuc);
@@ -774,7 +774,7 @@ public class ArvoreB {
 
     /**
      * Emprestar do irmão seguinte
-     * 
+     *
      * @param _raiz Raiz da sub-árvore.
      * @param idx Indice do nó na raiz.
      */
@@ -790,7 +790,7 @@ public class ArvoreB {
             filho.setC(filho.getN() + 1, irmao.getC(0));
         }
 
-        filho.setChave(idx, irmao.getChave(0));
+        _raiz.setChave(idx, irmao.getChave(0));
 
         for (int i = 1; i < irmao.getN(); i++) {
             irmao.setChave(i - 1, irmao.getChave(i));
@@ -815,10 +815,10 @@ public class ArvoreB {
      * @param idx Indice do nó na raiz.
      */
     public void preencherFilhos(No _raiz, int idx) {
-        if (idx != 0 && _raiz.getC(idx - 1).getN() >= t * 2) {
+        if (idx != 0 && _raiz.getC(idx - 1).getN() >= t) {
             this.pegarEmprestadoAnterior(_raiz, idx);
         } else {
-            if (idx != _raiz.getN() && _raiz.getC(idx + 1).getN() >= t * 2) {
+            if (idx != _raiz.getN() && _raiz.getC(idx + 1).getN() >= t) {
                 this.pergarEmprestadoProximo(_raiz, idx);
             } else {
                 if (idx != _raiz.getN()) {
@@ -840,17 +840,13 @@ public class ArvoreB {
      */
     public void remover(No _raiz, int k) {
         int i = 0;
-        
-        //System.out.println("antes: i:" + i + " n:" + _raiz.getN());
+
         //Procura a posição da chave no nó
         while (i < _raiz.getN() && k > _raiz.getChave(i)) {
-            //System.out.println("k:" + k + " raiz.chave:" + _raiz.getChave(i));
             i = i + 1;
         }
-        //System.out.println("depois: i:" + i + " n:" + _raiz.getN());
         //A chave está no nó _raiz
         if (i < _raiz.getN() && k == _raiz.getChave(i)) {
-            //System.out.println("a chave está no nó raiz");
             //O Nó é uma folha
             if (_raiz.getFolha()) {
                 //Remove k do _raiz;
@@ -859,11 +855,11 @@ public class ArvoreB {
                 this.removerNaoFolha(_raiz, i);
             }
         } else {
-            //A chave não está em _raiz            
-            if (!_raiz.getFolha()) {
+            //A _raiz não é folha
+            if (!_raiz.getFolha()) {            
                 boolean flag = (i == _raiz.getN());
 
-                if (_raiz.getC(i).getN() < t / 2) {
+                if (_raiz.getC(i).getN() < t) {
                     this.preencherFilhos(_raiz, i);
                 }
                 if (flag && i > _raiz.getN()) {
@@ -872,35 +868,40 @@ public class ArvoreB {
                     this.remover(_raiz.getC(i), k);
                 }
             } else {
-                System.out.println("A chave " + k + " não está na árvore");                
-            }
+                //Chegou em folha e não achou
+                System.out.println("A chave " + k + " não está na árvore");
+            } 
         }
     }
 
     /**
-     * Remove uma chave da árvore.
+     * removerCompleto uma chave da árvore.
      *
      * @param k Chave a ser removida.
      * @return Verdadeiro ou falso se conseguiu realizar a exclusão.
      */
     public boolean remover(int k) {
-        //Quantidade de nós antes da exclusão
-        int qtde1 = this.contarNo();
-        
-        if (this.getRaiz() != null) {
+        //Procura a chave na árvore
+        if (this.procurar(k) == null) {
+            return false;
+        } else {
             //Realiza a exclusão
             this.remover(this.getRaiz(), k);
-            
-            if (this.getRaiz().getN() == 0){
-                //Cria uma nova raiz.
-                this.alocarRaiz();
+
+            //Se a árvore ficou vazia 
+            if (this.getRaiz().getN() == 0) {
+                //No temp = this.getRaiz();
+                if (this.getRaiz().getFolha()) {
+                    //Cria uma nova raiz.
+                    this.alocarRaiz();
+                } else {
+                    //Seta a raiz com o primeiro filho
+                    this.setRaiz(this.getRaiz().getC(0));
+                }
+                //Apaga a raiz
+                //temp = null;                
             }
-        } else {
-            System.out.println("Lista está vazia");                                
+            return true;
         }
-        //Quantidade de nós depois da exclusão
-        int qtde2 = this.contarNo();
-        
-        return !(qtde1 == qtde2);
     }
 }

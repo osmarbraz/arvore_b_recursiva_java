@@ -35,17 +35,18 @@ public class No {
      * Construtor sem parâmetros.
      */
     public No() {
-        this(3);
+        this(3, true);
     }
     
     /**
      * Construtor sem parâmetros.
      * @param t Grau da árvore, quantidade de filhos para o nó.
+     * @param folha Indica se é um nó folha ou não.
      */
-    public No(int t) {
+    public No(int t, boolean folha) {
         this.n = 0;       
         this.t = t;
-        this.folha = true;
+        this.folha = folha;
         //Aloca o vetor de chaves
         this.chave = new int[2 * this.t - 1];
         //Aloca o vetor nós filhos
@@ -160,7 +161,18 @@ public class No {
      * @param k Chave a ser inserida.
      * @return Indica da posição no vetor.
      */
-    public int procurarPosicao(int k) {
+    public int procurarPosicaoChave(int k) {
+        int i = 0;
+        while ((i < n) && (k > chave[i])) {
+            if (k == chave[i]) {
+                    return i;
+            }
+            i = i + 1;
+        }
+        return i;
+    }
+    
+    public int procurarPosicaoChave1(int k) {
         int i = 0;
         while ((i < n) && (k > chave[i])) {
             i = i + 1;

@@ -1,6 +1,6 @@
 
 /**
- * Implementação de Árvore Binária Encadeada.
+ * Implementação de Árvore B Encadeada.
  */
 import javax.swing.JOptionPane;
 
@@ -60,7 +60,7 @@ public class Principal {
         /**
          * Declara e instância da árvore.
          */
-        ArvoreB ipe = new ArvoreB(3);
+        ArvoreB ipe = new ArvoreB(2);
 
         // Controla o menu da lista
         int opcao = -1;
@@ -173,7 +173,7 @@ public class Principal {
                     ipe.apagar();
                     System.out.println("Árvore apagada");
                     break;
-                }
+                }                
                 //Preenche uma árvore com vários nós
                 case 98: {
                     arvoreExemplo(ipe);
