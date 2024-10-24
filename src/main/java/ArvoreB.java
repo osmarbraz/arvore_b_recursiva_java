@@ -348,7 +348,18 @@ public class ArvoreB {
     /**
      * Inserção em sub-árvore B.
      * 
-     * Divisão(split) e Fusão(merge) preventiva para grau máximo.
+     * Com divisão(split) e fusão(merge) preventiva para grau máximo.
+     * 
+     * Insere os resultados de uma divisão de nó na árvore. 
+     * A função pega uma tupla contendo a chave que será inserida no nó _raiz(pai) 
+     * e ponteiros para os nós descendentes(filhos) esquerdo e direito. 
+     * Primeiro, ele verifica se o nó _raiz(pai) é nulo, nesse caso ele cria 
+     * um novo nó raiz e atualiza os seus atributos. Caso contrário, se o nó 
+     * não estiver cheio (n &lt; 2 * t -1) ele chamada a função inserirNaoCheio 
+     * recursivamente até encontrar a posição da chave a realizar a inserção.
+     * Se o nó estiver cheio cheio (n = 2 * t -1) ele chamada a função dividirNo 
+     * para dividir para a nova raiz na posição 0 em dois nós para poder inserir 
+     * o novo nó e chama a função inserirNaoCheio.
      *
      * Inserir recursivo em sub-árvore B. Baseado no método B-TREE-INSERT(T,k)
      * Thomas H. Cormen Página 495 Em Cormen r = _raiz
