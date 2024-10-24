@@ -44,16 +44,11 @@ public class ArvoreB {
     public ArvoreB(int t) {
         this.t = t;
 
-        //Cria a raiz da árvore.
-        this.alocarRaiz();
-    }
+        //Define árvore como vazia
+        this.setRaiz(null);
 
-    /**
-     * Aloca a raiz da árvore.
-     */
-    public void alocarRaiz() {
-        //Instancia o nó raiz da árvore.
-        this.raiz = new No(this.t, true);
+        //Aloca o primeiro no
+        //this.raiz = new No(this.t, true);
     }
 
     /**
@@ -207,34 +202,36 @@ public class ArvoreB {
      * @param _raiz Início da sub-árvore.
      */
     public void listarEmNilvelDetalhes(No _raiz) {
-        //Lista para armanzenar os nós do nível
-        Queue<No> queue = new LinkedList<>();
-        //Começa pela raiz
-        queue.add(_raiz);
-        System.out.println("OID Raiz:" + this.getRaiz());
-        int nivel = 0;
-
-        while (!queue.isEmpty()) {
-            Queue<No> proximoNivel = new LinkedList<>();
-
-            System.out.println("Nível:" + nivel);
+        if (_raiz != null) {
+            //Lista para armanzenar os nós do nível
+            Queue<No> queue = new LinkedList<>();
+            //Começa pela raiz
+            queue.add(_raiz);
+            System.out.println("OID Raiz:" + this.getRaiz());
+            int nivel = 0;
 
             while (!queue.isEmpty()) {
-                //Retira o primeiro nó da fila
-                No atual = queue.poll();
+                Queue<No> proximoNivel = new LinkedList<>();
 
-                //Exib os ddos do nó atual                
-                System.out.println("[" + atual.getDadosVetoresStr() + "]");
+                System.out.println("Nível:" + nivel);
 
-                //Adiciona os filhos do nó atual a lista para exibir o próximo nível                
-                for (int i = 0; i < atual.getN() + 1; i++) {
-                    if (atual.getC(i) != null) {
-                        proximoNivel.add(atual.getC(i));
+                while (!queue.isEmpty()) {
+                    //Retira o primeiro nó da fila
+                    No atual = queue.poll();
+
+                    //Exib os ddos do nó atual                
+                    System.out.println("[" + atual.getDadosVetoresStr() + "]");
+
+                    //Adiciona os filhos do nó atual a lista para exibir o próximo nível                
+                    for (int i = 0; i < atual.getN() + 1; i++) {
+                        if (atual.getC(i) != null) {
+                            proximoNivel.add(atual.getC(i));
+                        }
                     }
                 }
+                nivel = nivel + 1;
+                queue = proximoNivel;
             }
-            nivel = nivel + 1;
-            queue = proximoNivel;
         }
     }
 
@@ -358,26 +355,40 @@ public class ArvoreB {
      * @param k Chave a ser inserida.
      */
     public void inserir(No _raiz, int k) {
-        //Já atingiu a quantidade máxima de chaves no Nó.
-        if (_raiz.getN() == (2 * this.t - 1)) {
+        //Árvore vazia
+        if (this.getRaiz() == null) {
+            System.out.println("Arvore vazia " + k);
             //Cria um novo nó
-            No s = new No(this.t, false);
-
-            //Quantidade de chaves no novo no
-            s.setN(0);
+            No s = new No(this.t, true);
             //Tornar a raiz anterior filho da nova raiz
             s.setC(0, _raiz);
-            //Modifica a raiz com o novo nó criado
+            //Atribui o valor da chave
+            s.setChave(0, k);
+            //Incrementa a quantidade de chaves
+            s.setN(s.getN() + 1);
+            //Atribui o novo nó a raiz
             this.setRaiz(s);
-
-            //Dividir a raiz atual e mover 1a chave para a nova raiz
-            this.dividirFilho(s, 0);
-
-            //Insere na nova sub-árvore
-            this.inserirNaoCheio(s, k);
         } else {
-            //Arvore não está cheia
-            this.inserirNaoCheio(_raiz, k);
+            //Já atingiu a quantidade máxima de chaves no Nó.
+            if (_raiz.getN() == (2 * this.t - 1)) {
+                //Cria um novo nó
+                No s = new No(this.t, false);
+                //Quantidade de chaves no novo no
+                s.setN(0);
+                //Tornar a raiz anterior filho da nova raiz
+                s.setC(0, _raiz);
+                //Modifica a raiz com o novo nó criado
+                this.setRaiz(s);
+
+                //Dividir a raiz atual e mover 1a chave para a nova raiz
+                this.dividirFilho(s, 0);
+
+                //Insere na nova sub-árvore
+                this.inserirNaoCheio(s, k);
+            } else {
+                //Arvore não está cheia
+                this.inserirNaoCheio(_raiz, k);
+            }
         }
     }
 
@@ -459,8 +470,6 @@ public class ArvoreB {
      */
     public void apagar() {
         this.setRaiz(apagar(this.getRaiz()));
-        //Cria uma nova raiz
-        this.alocarRaiz();
     }
 
     /**
@@ -892,9 +901,9 @@ public class ArvoreB {
             //Se a árvore ficou vazia 
             if (this.getRaiz().getN() == 0) {
                 //No temp = this.getRaiz();
-                if (this.getRaiz().getFolha()) {
-                    //Cria uma nova raiz.
-                    this.alocarRaiz();
+                if (this.getRaiz().getFolha()) {                    
+                    //Atribui null para a raiz
+                    this.setRaiz(null);
                 } else {
                     //Seta a raiz com o primeiro filho
                     this.setRaiz(this.getRaiz().getC(0));
