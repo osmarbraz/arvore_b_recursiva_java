@@ -4,7 +4,7 @@ import java.util.Queue;
 
 /**
  * Árvore B.
- *
+ *  
  * Criada por Rudolf Bayer e Edward Meyers McCreight em 1971 enquanto
  * trabalhavam no Boeing Scientific Research Labs, a origem do nome (árvore B)
  * não foi definida por estes. Especula-se que o B venha da palavra
@@ -255,6 +255,10 @@ public class ArvoreB {
      * @param i Indíce da posição a ser dividida.
      */
     public void dividirFilho(No x, int i) {
+        //x = parent
+        //y = child
+        //z = newChild
+
         //Dividir x em duas partes, y e z.
         //Recupera o primeiro filho da raiz.
         //y filho da esquerda da raiz(x)
@@ -266,22 +270,27 @@ public class ArvoreB {
         z.setN(t - 1);
 
         //Copia as últimas chaves (t-1) de y(esquerda) para z(direita)
-        for (int j = 0; j < t - 1; j++) {
-            z.setChave(j, y.getChave(j + t));
+        //for (int j = 0; j < t - 1; j++) {
+        for (int j = 0; j < y.getT() - 1; j++) {
+            //z.setChave(j, y.getChave(j + t));
+            z.setChave(j, y.getChave(j + y.getT()));
             //Zera a chave de y pois já foram copiados para z
-            y.setChave(j + t, 0);
+            //y.setChave(j + t, 0);
         }
         //Se y não for folha
         if (y.getFolha() == false) {
             //Copia os últimos t filhos de y para z
-            for (int j = 0; j < t; j++) {
-                z.setC(j, y.getC(j + t));
+            //for (int j = 0; j < t; j++) {
+            for (int j = 0; j < y.getT(); j++) {
+                //z.setC(j, y.getC(j + t));
+                z.setC(j, y.getC(j + y.getT()));                
                 //Zera os filhos de y pois já foram copiados para z
-                y.setC(j + t, null);
+                //y.setC(j + t, null);
             }
         }
         //Reduz a quantidade de elementos de y
-        y.setN(t - 1);
+        //y.setN(t - 1);
+        y.setN(y.getT() - 1);
 
         //Como este nó terá um novo filho, cria espaço para o novo filho
         for (int j = x.getN(); j >= i + 1; j--) {
@@ -298,9 +307,10 @@ public class ArvoreB {
             x.setChave(j + 1, x.getChave(j));
         }
         //Copie a chave do meio de y para este nó raiz
-        x.setChave(i, y.getChave(t - 1));
+        //x.setChave(i, y.getChave(t - 1));
+        x.setChave(i, y.getChave(y.getT() - 1));
         //Zera a chave de y pois já foi copiado para a raiz
-        y.setChave(t - 1, 0);
+        //y.setChave(t - 1, 0);
 
         //Incrementa a contagem de chaves neste nó
         x.setN(x.getN() + 1);
@@ -315,7 +325,7 @@ public class ArvoreB {
      * @param k Chave a ser inserida.
      */
     public void inserirNaoCheio(No _raiz, int k) {
-
+        
         int i = _raiz.getN() - 1;
         if (_raiz.getFolha()) {
             //Procura a posição i de inserção
@@ -347,6 +357,8 @@ public class ArvoreB {
 
     /**
      * Inserção em sub-árvore B.
+     * 
+     * Divisão(split) e Fusão(merge) preventiva para grau máximo.
      *
      * Inserir recursivo em sub-árvore B. Baseado no método B-TREE-INSERT(T,k)
      * Thomas H. Cormen Página 495 Em Cormen r = _raiz
@@ -379,10 +391,8 @@ public class ArvoreB {
                 s.setC(0, _raiz);
                 //Modifica a raiz com o novo nó criado
                 this.setRaiz(s);
-
                 //Dividir a raiz atual e mover 1a chave para a nova raiz
                 this.dividirFilho(s, 0);
-
                 //Insere na nova sub-árvore
                 this.inserirNaoCheio(s, k);
             } else {
@@ -645,12 +655,14 @@ public class ArvoreB {
     }
 
     /**
-     * Merge de dois nós.
+     * Fusão(Merge) de dois nós.
+     * 
+     * Realiza a fusão dos nós i e i + 1 na árvore em _raiz.
      *
      * @param _raiz Início da árvore.
      * @param idx Indice do nó na raiz.
      */
-    public void mergeFilhos(No _raiz, int idx) {
+    public void fusaoNos(No _raiz, int idx) {
         //Recupera o nó do filho
         No filho = _raiz.getC(idx);
         //Recupera o nó do irmão do filho;
@@ -739,7 +751,7 @@ public class ArvoreB {
                 this.remover(_raiz.getC(idx + 1), ksuc);
             } else {
                 //Ambos os nós noAnt e noProx contêm apenas chave em quantidades menores que o máximo
-                mergeFilhos(_raiz, idx);
+                fusaoNos(_raiz, idx);
                 this.remover(_raiz.getC(idx), k);
             }
         }
@@ -832,9 +844,9 @@ public class ArvoreB {
                 this.pergarEmprestadoProximo(_raiz, idx);
             } else {
                 if (idx != _raiz.getN()) {
-                    this.mergeFilhos(_raiz, idx);
+                    this.fusaoNos(_raiz, idx);
                 } else {
-                    this.mergeFilhos(_raiz, idx - 1);
+                    this.fusaoNos(_raiz, idx - 1);
                 }
             }
         }
@@ -901,7 +913,7 @@ public class ArvoreB {
             //Se a árvore ficou vazia 
             if (this.getRaiz().getN() == 0) {
                 //No temp = this.getRaiz();
-                if (this.getRaiz().getFolha()) {                    
+                if (this.getRaiz().getFolha()) {
                     //Atribui null para a raiz
                     this.setRaiz(null);
                 } else {
