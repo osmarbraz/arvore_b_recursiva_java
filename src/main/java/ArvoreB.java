@@ -244,21 +244,17 @@ public class ArvoreB {
     }
 
     /**
-     * Dividir(split) um nó em 2 filhos.
+     * Dividir(split) um nó em 2 nós descendentes.
      *
-     * Função para dividir o filho r deste nó. Observe que r deve estar completo
-     * quando esta função for chamada.
+     * Função para dividir um nó x da posição i em dois nós decendentes. 
+     * Observe que x deve estar completo quando a função for chamada.     
      *
      * Baseado no método B-TREE-SPLIT-CHILD(x,i) Thomas H. Cormen Página 494.
      *
      * @param x Raiz da sub-árvore.
      * @param i Indíce da posição a ser dividida.
      */
-    public void dividirFilho(No x, int i) {
-        //x = parent
-        //y = child
-        //z = newChild
-
+    public void dividirNo(No x, int i) {
         //Dividir x em duas partes, y e z.
         //Recupera o primeiro filho da raiz.
         //y filho da esquerda da raiz(x)
@@ -270,27 +266,22 @@ public class ArvoreB {
         z.setN(t - 1);
 
         //Copia as últimas chaves (t-1) de y(esquerda) para z(direita)
-        //for (int j = 0; j < t - 1; j++) {
-        for (int j = 0; j < y.getT() - 1; j++) {
-            //z.setChave(j, y.getChave(j + t));
-            z.setChave(j, y.getChave(j + y.getT()));
+        for (int j = 0; j < this.t - 1; j++) {
+            z.setChave(j, y.getChave(j + this.t));
             //Zera a chave de y pois já foram copiados para z
-            //y.setChave(j + t, 0);
+            y.setChave(j + t, 0);
         }
         //Se y não for folha
         if (y.getFolha() == false) {
             //Copia os últimos t filhos de y para z
-            //for (int j = 0; j < t; j++) {
-            for (int j = 0; j < y.getT(); j++) {
-                //z.setC(j, y.getC(j + t));
-                z.setC(j, y.getC(j + y.getT()));                
+            for (int j = 0; j < this.t; j++) {
+                z.setC(j, y.getC(j + this.t));
                 //Zera os filhos de y pois já foram copiados para z
-                //y.setC(j + t, null);
+                y.setC(j + t, null);
             }
         }
         //Reduz a quantidade de elementos de y
-        //y.setN(t - 1);
-        y.setN(y.getT() - 1);
+        y.setN(this.t - 1);
 
         //Como este nó terá um novo filho, cria espaço para o novo filho
         for (int j = x.getN(); j >= i + 1; j--) {
@@ -307,10 +298,9 @@ public class ArvoreB {
             x.setChave(j + 1, x.getChave(j));
         }
         //Copie a chave do meio de y para este nó raiz
-        //x.setChave(i, y.getChave(t - 1));
-        x.setChave(i, y.getChave(y.getT() - 1));
+        x.setChave(i, y.getChave(this.t - 1));        
         //Zera a chave de y pois já foi copiado para a raiz
-        //y.setChave(t - 1, 0);
+        y.setChave(t - 1, 0);
 
         //Incrementa a contagem de chaves neste nó
         x.setN(x.getN() + 1);
@@ -346,7 +336,7 @@ public class ArvoreB {
 
             //Veja se o filho encontrado está cheio
             if (_raiz.getC(i).getN() == (2 * _raiz.getT() - 1)) {
-                this.dividirFilho(_raiz, i);
+                this.dividirNo(_raiz, i);
                 if (k > _raiz.getChave(i)) {
                     i = i + 1;
                 }
@@ -392,7 +382,7 @@ public class ArvoreB {
                 //Modifica a raiz com o novo nó criado
                 this.setRaiz(s);
                 //Dividir a raiz atual e mover 1a chave para a nova raiz
-                this.dividirFilho(s, 0);
+                this.dividirNo(s, 0);
                 //Insere na nova sub-árvore
                 this.inserirNaoCheio(s, k);
             } else {
