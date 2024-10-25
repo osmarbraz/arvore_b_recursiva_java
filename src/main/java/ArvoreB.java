@@ -4,7 +4,7 @@ import java.util.Queue;
 
 /**
  * Árvore B.
- *  
+ *
  * Criada por Rudolf Bayer e Edward Meyers McCreight em 1971 enquanto
  * trabalhavam no Boeing Scientific Research Labs, a origem do nome (árvore B)
  * não foi definida por estes. Especula-se que o B venha da palavra
@@ -246,8 +246,8 @@ public class ArvoreB {
     /**
      * Dividir(split) um nó em 2 nós descendentes.
      *
-     * Função para dividir um nó x da posição i em dois nós decendentes. 
-     * Observe que x deve estar completo quando a função for chamada.     
+     * Função para dividir um nó x da posição i em dois nós decendentes. Observe
+     * que x deve estar completo quando a função for chamada.
      *
      * Baseado no método B-TREE-SPLIT-CHILD(x,i) Thomas H. Cormen Página 494.
      *
@@ -261,11 +261,11 @@ public class ArvoreB {
         No y = x.getC(i);
 
         //Cria um novo nó filho que irá armazenar chaves (t-1) de y.
-        //Este novo nó vai ficar a esquerda de y.
+        //Este novo nó vai ficar a direita de y.
         No z = new No(this.t, y.getFolha());
         z.setN(t - 1);
 
-        //Copia as últimas chaves (t-1) de y(esquerda) para z(direita)
+        //Copia as metade(t-1) das chaves de y(esquerda) para z(direita)
         for (int j = 0; j < this.t - 1; j++) {
             z.setChave(j, y.getChave(j + this.t));
             //Zera a chave de y pois já foram copiados para z
@@ -273,7 +273,7 @@ public class ArvoreB {
         }
         //Se y não for folha
         if (y.getFolha() == false) {
-            //Copia os últimos t filhos de y para z
+            //Copia metade (t) dos filhos de y(esquerda) para z(direita)
             for (int j = 0; j < this.t; j++) {
                 z.setC(j, y.getC(j + this.t));
                 //Zera os filhos de y pois já foram copiados para z
@@ -298,7 +298,7 @@ public class ArvoreB {
             x.setChave(j + 1, x.getChave(j));
         }
         //Copie a chave do meio de y para este nó raiz
-        x.setChave(i, y.getChave(this.t - 1));        
+        x.setChave(i, y.getChave(this.t - 1));
         //Zera a chave de y pois já foi copiado para a raiz
         y.setChave(t - 1, 0);
 
@@ -315,10 +315,12 @@ public class ArvoreB {
      * @param k Chave a ser inserida.
      */
     public void inserirNaoCheio(No _raiz, int k) {
-        
+
         int i = _raiz.getN() - 1;
+        //Se _raiz é uma folha, inserimos o valor diretamente
         if (_raiz.getFolha()) {
-            //Procura a posição i de inserção
+            //Percorre o vetor de chaves até a posição de inserção.
+            //Desloca as chaves i + 1 posições para a inclusão da nova chave.
             while ((i >= 0) && (k < _raiz.getChave(i))) {
                 _raiz.setChave(i + 1, _raiz.getChave(i));
                 i = i - 1;
@@ -326,7 +328,7 @@ public class ArvoreB {
             _raiz.setChave(i + 1, k);
             _raiz.setN(_raiz.getN() + 1);
         } else {
-            //Se o nó não é folha
+            // Se_raiz não é uma folha, encontramos o filho correto e inserimos recursivamente
 
             //Encontra o filho que terá a nova chave
             while ((i >= 0) && (k < _raiz.getChave(i))) {
@@ -347,19 +349,19 @@ public class ArvoreB {
 
     /**
      * Inserção em sub-árvore B.
-     * 
+     *
      * Com divisão(split) e fusão(merge) preventiva para grau máximo.
-     * 
-     * Insere os resultados de uma divisão de nó na árvore. 
-     * A função pega uma tupla contendo a chave que será inserida no nó _raiz(pai) 
-     * e ponteiros para os nós descendentes(filhos) esquerdo e direito. 
-     * Primeiro, ele verifica se o nó _raiz(pai) é nulo, nesse caso ele cria 
-     * um novo nó raiz e atualiza os seus atributos. Caso contrário, se o nó 
-     * não estiver cheio (n &lt; 2 * t -1) ele chamada a função inserirNaoCheio 
-     * recursivamente até encontrar a posição da chave a realizar a inserção.
-     * Se o nó estiver cheio cheio (n = 2 * t -1) ele chamada a função dividirNo 
-     * para dividir para a nova raiz na posição 0 em dois nós para poder inserir 
-     * o novo nó e chama a função inserirNaoCheio.
+     *
+     * Insere os resultados de uma divisão de nó na árvore. A função pega uma
+     * tupla contendo a chave que será inserida no nó _raiz(pai) e ponteiros
+     * para os nós descendentes(filhos) esquerdo e direito. Primeiro, ele
+     * verifica se o nó _raiz(pai) é nulo, nesse caso ele cria um novo nó raiz e
+     * atualiza os seus atributos. Caso contrário, se o nó não estiver cheio (n
+     * &lt; 2 * t -1) ele chamada a função inserirNaoCheio recursivamente até
+     * encontrar a posição da chave a realizar a inserção. Se o nó estiver cheio
+     * cheio (n = 2 * t -1) ele chamada a função dividirNo para dividir para a
+     * nova raiz na posição 0 em dois nós para poder inserir o novo nó e chama a
+     * função inserirNaoCheio.
      *
      * Inserir recursivo em sub-árvore B. Baseado no método B-TREE-INSERT(T,k)
      * Thomas H. Cormen Página 495 Em Cormen r = _raiz
@@ -657,7 +659,7 @@ public class ArvoreB {
 
     /**
      * Fusão(Merge) de dois nós.
-     * 
+     *
      * Realiza a fusão dos nós i e i + 1 na árvore em _raiz.
      *
      * @param _raiz Início da árvore.

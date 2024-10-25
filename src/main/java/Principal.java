@@ -1,6 +1,6 @@
 
 /**
- * Implementação de Árvore B Encadeada.
+ * Programa principal de manipulação da Árvore B.
  */
 import javax.swing.JOptionPane;
 
@@ -60,7 +60,7 @@ public class Principal {
         /**
          * Declara e instância da árvore.
          */
-        ArvoreB ipe = new ArvoreB(2);
+        ArvoreB ipe = new ArvoreB(3);
 
         // Controla o menu da lista
         int opcao = -1;
