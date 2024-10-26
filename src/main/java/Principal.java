@@ -78,7 +78,7 @@ public class Principal {
                     + " 6- Caminhar Em Nível\n"
                     + " 7- Caminhar Em Nível Detalhado\n"
                     + " 8- Contar nós \n"
-                    + " 9- Localizar nó \n"
+                    + " 9- Procurar nó \n"
                     + "10- Mostrar folhas \n"
                     + "11- Altura da árvore\n"
                     + "12- Valor mínimo da árvore\n"

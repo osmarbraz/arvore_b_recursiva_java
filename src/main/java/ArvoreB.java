@@ -440,7 +440,7 @@ public class ArvoreB {
             if (_raiz.getFolha() == true) {
                 return null;
             } else {
-                //Procura no ´róximo filho
+                //Procura no próximo filho
                 return procurar(_raiz.getC(i), k);
             }
         } else {
