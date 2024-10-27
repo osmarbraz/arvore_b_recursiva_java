@@ -42,13 +42,11 @@ public class ArvoreB {
      * @param t Grau mínimo (define o intervalo para o número de chaves).
      */
     public ArvoreB(int t) {
+        //Define o grau(ordem) mínimo da árvore.
         this.t = t;
 
         //Define árvore como vazia
-        this.setRaiz(null);
-
-        //Aloca o primeiro no
-        //this.raiz = new No(this.t, true);
+        this.raiz = null;
     }
 
     /**
@@ -93,10 +91,14 @@ public class ArvoreB {
      * @param _raiz Início da sub-árvore.
      */
     public void listarPreOrdem(No _raiz) {
+        //Se _raiz não for nulo
         if (_raiz != null) {
             int i;
+            //Percorre todas as chaves do nó _raiz
             for (i = 0; i < _raiz.getN(); i++) {
+                //Visita a chave i da _raiz
                 System.out.print(_raiz.getChave(i) + " ");
+                //Percorre o filho i da _raiz
                 listarPreOrdem(_raiz.getC(i));
             }
             //Percorre o último filho            
@@ -118,12 +120,14 @@ public class ArvoreB {
      * @param _raiz Início da sub-árvore.
      */
     public void listarCentralOrdem(No _raiz) {
+        //Se _raiz não for nulo
         if (_raiz != null) {
             int i;
+            //Percorre todas as chaves do nó _raiz
             for (i = 0; i < _raiz.getN(); i++) {
+                //Percore o filho i da _raiz
                 listarCentralOrdem(_raiz.getC(i));
-
-                // Visita a chave i
+                // Visita a chave i da _raiz
                 System.out.print(_raiz.getChave(i) + " ");
             }
             // Percorre o último filho
@@ -145,12 +149,14 @@ public class ArvoreB {
      * @param _raiz Início da sub-árvore.
      */
     public void listarPosOrdem(No _raiz) {
+        //Se _raiz não for nulo
         if (_raiz != null) {
             int i;
+            //Percorre todas as chaves do nó _raiz
             for (i = 0; i < _raiz.getN(); i++) {
-                //Percorre o filho à esquerda da chave i
+                //Percorre o filho i da _raiz
                 listarPosOrdem(_raiz.getC(i));
-                // Visita a chave i
+                //Visita a chave i da _raiz
                 System.out.print(_raiz.getChave(i) + " ");
             }
             // Percorre o último filho
@@ -177,6 +183,7 @@ public class ArvoreB {
         while (!queue.isEmpty()) {
             No atual = queue.poll();
             for (int i = 0; i < atual.getN(); i++) {
+                //Visita o filho i do nó atual
                 System.out.print(atual.getChave(i) + " ");
             }
             if (!atual.getFolha()) {
@@ -202,6 +209,7 @@ public class ArvoreB {
      * @param _raiz Início da sub-árvore.
      */
     public void listarEmNilvelDetalhes(No _raiz) {
+        //Se _raiz não for nulo
         if (_raiz != null) {
             //Lista para armanzenar os nós do nível
             Queue<No> queue = new LinkedList<>();
@@ -325,7 +333,9 @@ public class ArvoreB {
                 _raiz.setChave(i + 1, _raiz.getChave(i));
                 i = i - 1;
             }
+            //Insere a nova chave
             _raiz.setChave(i + 1, k);
+            //Incrementa a quantidade de chaves
             _raiz.setN(_raiz.getN() + 1);
         } else {
             // Se_raiz não é uma folha, encontramos o filho correto e inserimos recursivamente
@@ -424,7 +434,7 @@ public class ArvoreB {
      * @return Retorna o nó que possui o valor k.
      */
     public No procurar(No _raiz, int k) {
-
+        //Se _raiz diferente de nulo
         if (_raiz != null) {
 
             int i = 0;
@@ -702,7 +712,7 @@ public class ArvoreB {
         _raiz.setN(_raiz.getN() - 1);
 
         //Apaga o irmão
-        irmao = null;
+        //irmao = null;
     }
 
     /**
